@@ -1,7 +1,10 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="text-2xl" >Home page</div>
+    <>
+      <div>Home page</div>
+      <Link href={'properties'}>Properties</Link>
+    </>
   );
 }
