@@ -11,6 +11,7 @@ import { FaGoogle } from "react-icons/fa";
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuopen] = useState<boolean>(false);
   const [isProfileMenuOpen, setIsProfileMenuopen] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const pathname = usePathname();
