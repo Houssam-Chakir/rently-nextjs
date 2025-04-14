@@ -1,8 +1,8 @@
-import {PropertyType} from '@/.next/types/Properties'
-import PropertyCard from '@/components/PropertyCard';
-
-import properties from "@/properties.json";
 import { ReactElement } from "react";
+import PropertyType from "@/Types/PropertiesType";
+
+import PropertyCard from "@/components/PropertyCard";
+import properties from "@/properties.json";
 
 const PropertiesPage = () => {
   return (
@@ -12,8 +12,8 @@ const PropertiesPage = () => {
           <p>No properties found</p>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {properties.map((property: PropertyType):ReactElement => {
-              return (<PropertyCard property={property} key={property._id}/>)
+            {properties.map((property: PropertyType): ReactElement => {
+              return <PropertyCard property={property} key={property._id.toString()} />;
             })}
           </div>
         )}

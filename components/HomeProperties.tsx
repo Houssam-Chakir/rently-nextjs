@@ -1,4 +1,4 @@
-import { PropertyType } from "@/.next/types/Properties";
+import { PropertyType } from "@/models/Types/PropertiesType";
 import properties from "@/properties.json";
 import PropertyCard from "./PropertyCard";
 import { ReactElement } from "react";

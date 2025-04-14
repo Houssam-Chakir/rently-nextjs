@@ -1,7 +1,7 @@
 "use client";
 import { FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker } from "react-icons/fa";
 
-import { PropertyType } from "@/.next/types/Properties";
+import { PropertyType } from "@/models/Types/PropertiesType";
 import Image from "next/image";
 import Link from "next/link";
 
