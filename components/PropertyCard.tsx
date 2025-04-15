@@ -1,9 +1,10 @@
 "use client";
 import { FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker } from "react-icons/fa";
 
-import { PropertyType } from "@/models/Types/PropertiesType";
+
 import Image from "next/image";
 import Link from "next/link";
+import PropertyType from "@/Types/PropertiesType";
 
 type PropertyCard = {
   property: PropertyType;
