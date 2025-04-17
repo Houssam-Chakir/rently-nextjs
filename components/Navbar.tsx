@@ -5,16 +5,32 @@ import profileDefault from "@/assets/images/profile.png";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { signIn, signOut, useSession, getProviders, LiteralUnion, ClientSafeProvider } from "next-auth/react";
+
 import { FaGoogle } from "react-icons/fa";
+import { BuiltInProviderType } from "next-auth/providers/index";
+
+type Providers = Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null;
 
 const Navbar = () => {
+  const { data: session } = useSession();
+  console.log("session: ", session);
+
   const [isMobileMenuOpen, setIsMobileMenuopen] = useState<boolean>(false);
   const [isProfileMenuOpen, setIsProfileMenuopen] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [providers, setProviders] = useState<Providers>(null);
 
   const pathname = usePathname();
+
+  useEffect(() => {
+    const setAuthProvider = async () => {
+      const res = await getProviders();
+      setProviders(res);
+    };
+    setAuthProvider();
+  }, []);
 
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
@@ -54,7 +70,7 @@ const Navbar = () => {
                 <Link href='/properties' className={`${pathname === "/properties" ? "bg-black" : ""} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}>
                   Properties
                 </Link>
-                {isLoggedIn && (
+                {session && (
                   <Link href='/properties/add' className={`${pathname === "/properties/add" ? "bg-black" : ""} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}>
                     Add Property
                   </Link>
@@ -64,19 +80,24 @@ const Navbar = () => {
           </div>
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
-          {!isLoggedIn && (
+          {!session && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
-                <button className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'>
-                  <FaGoogle className='text-white mr-2' />
-                  <span>Login or Register</span>
-                </button>
+                {providers &&
+                  Object.values(providers).map((provider) => {
+                    return (
+                      <button onClick={() => signIn(provider.id)} key={provider.id} className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'>
+                        <FaGoogle className='text-white mr-2' />
+                        <span>Login with {provider.name}</span>
+                      </button>
+                    );
+                  })}
               </div>
             </div>
           )}
 
           {/* <!-- Right Side Menu (Logged In) --> */}
-          {isLoggedIn && (
+          {session && (
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0'>
               <Link href='/messages' className='relative group'>
                 <button
@@ -151,12 +172,12 @@ const Navbar = () => {
             <Link href='/properties' className={`${pathname === "/properties" ? "bg-black" : ""} 'bg-black text-white block rounded-md px-3 py-2 text-base font-medium'`}>
               Properties
             </Link>
-            {isLoggedIn && (
+            {session && (
               <Link href='/properties/add' className={`${pathname === "/properties/add" ? "bg-black" : ""} 'bg-black text-white block rounded-md px-3 py-2 text-base font-medium'`}>
                 Add Property
               </Link>
             )}
-            {!isLoggedIn && (
+            {!session && (
               <button className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-5'>
                 <i className='fa-brands fa-google mr-2'></i>
                 <span>Login or Register</span>

@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AuthProvider from "@/components/AuthProvider";
 
 const poppins = Poppins({
   subsets: ["latin"], // make sure you include at least one subset
@@ -22,14 +23,16 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' className={poppins.variable}>
-      <body className={` antialiased`}>
-        <>
-          <Navbar />
-          {children}
-          <Footer />
-        </>
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang='en' className={poppins.variable}>
+        <body className={` antialiased`}>
+          <>
+            <Navbar />
+            {children}
+            <Footer />
+          </>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }
