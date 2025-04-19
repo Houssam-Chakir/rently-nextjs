@@ -24,7 +24,7 @@ const PropertyCard = ({ property }: PropertyCard) => {
   };
   return (
     <div className='rounded-xl shadow-md relative'>
-      <Image src={`/properties/${property.images[0]}`} width='0' height='0' sizes='100vw' alt='' className='w-full h-auto rounded-t-xl' />
+      <Image src={property.images[0]} width='0' height='0' sizes='100vw' alt='' className='w-full h-auto rounded-t-xl' />
       <div className='p-4'>
         <div className='text-left md:text-center lg:text-left mb-6'>
           <div className='text-gray-600'>{property.type}</div>

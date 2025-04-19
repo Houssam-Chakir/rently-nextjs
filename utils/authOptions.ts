@@ -1,6 +1,7 @@
 import connectDB from "@/config/database";
 import User from "@/models/User";
 import GoogleProvider from "next-auth/providers/google";
+import { NextAuthOptions } from "next-auth";
 
 /**
  * Configuration options for authentication, including providers and callbacks.
@@ -21,7 +22,7 @@ import GoogleProvider from "next-auth/providers/google";
  *     - Assigns the user's ID from the database to the session's user object.
  *     - Returns the modified session object.
  */
-const authOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId:
@@ -57,7 +58,7 @@ const authOptions = {
      *
      * @throws Will throw an error if the database connection or user creation fails.
      */
-    async signIn({ profile }) {
+    async signIn({ profile }: { profile: { email: string; name: string; picture: string } }) {
       // Establish database connection
       await connectDB();
       // Check for existing user in database using profile email
@@ -80,7 +81,7 @@ const authOptions = {
       }
       return true;
     },
-    async session({ session }: { session: { user: { email: string; id: string } } }) {
+    async session({ session }: { session: { user: { email: string; id: string, name: string, image:string } } }) {
       // Retrieve the user from the database based on the email in the session.
       const user = await User.findOne({ email: session.user.email });
       // Assign the user's ID from the database to the session's user object.  Convert the ID to a string for consistency.

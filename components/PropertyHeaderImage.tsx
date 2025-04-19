@@ -12,7 +12,7 @@ const PropertyHeaderImage = ({ image }: PropertyHeaderImageType): JSX.Element =>
       <section>
         <div className='container-xl m-auto'>
           <div className='grid grid-cols-1'>
-            <Image src={`/properties/${image}`} width='0' height='0' sizes="100vw" alt='' className='object-cover h-[400px] w-full' />
+            <Image src={image} width='0' height='0' sizes="100vw" alt='' className='object-cover h-[400px] w-full' />
           </div>
         </div>
       </section>

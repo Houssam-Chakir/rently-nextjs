@@ -16,7 +16,7 @@ type Providers = Record<LiteralUnion<BuiltInProviderType, string>, ClientSafePro
 
 const Navbar = () => {
   const { data: session } = useSession();
-  console.log("session: ", session);
+  const profileImage = session?.user?.image || profileDefault
 
   const [isMobileMenuOpen, setIsMobileMenuopen] = useState<boolean>(false);
   const [isProfileMenuOpen, setIsProfileMenuopen] = useState<boolean>(false);
@@ -131,7 +131,7 @@ const Navbar = () => {
                   >
                     <span className='absolute -inset-1.5'></span>
                     <span className='sr-only'>Open user menu</span>
-                    <Image className='h-8 w-8 rounded-full' src={profileDefault} width={32} alt='profile default' />
+                    <Image className='h-8 w-8 rounded-full' src={profileImage} width={32} height={32} alt='profile default' />
                   </button>
                 </div>
 
@@ -151,7 +151,7 @@ const Navbar = () => {
                     <Link href='/properties/saved' className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-2'>
                       Saved Properties
                     </Link>
-                    <button className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-2'>
+                    <button onClick={()=>signOut()} className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-2'>
                       Sign Out
                     </button>
                   </div>
