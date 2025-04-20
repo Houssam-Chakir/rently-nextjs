@@ -29,7 +29,6 @@ const ProfilePage = async () => {
 
   const properties = await Property.find({owner: userId}).lean()
   const propertiesObj = properties.map(convertToSerializableObject)
-  console.log('properties: ', properties[0]);
 
   return (
     <section className='bg-blue-50'>

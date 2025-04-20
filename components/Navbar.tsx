@@ -145,10 +145,10 @@ const Navbar = () => {
                     aria-labelledby='user-menu-button'
                     tabIndex={-1}
                   >
-                    <Link href='/profile' className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-0'>
+                    <Link onClick={() => setIsProfileMenuopen((prev) => !prev)} href='/profile' className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-0'>
                       Your Profile
                     </Link>
-                    <Link href='/properties/saved' className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-2'>
+                    <Link onClick={() => setIsProfileMenuopen((prev) => !prev)} href='/properties/saved' className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-2'>
                       Saved Properties
                     </Link>
                     <button onClick={()=>signOut()} className='block px-4 py-2 text-sm text-gray-700' role='menuitem' tabIndex={-1} id='user-menu-item-2'>

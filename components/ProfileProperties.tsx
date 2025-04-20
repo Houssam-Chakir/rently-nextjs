@@ -1,14 +1,30 @@
 "use client";
 
+import deleteProperty from "@/app/actions/deleteProperty";
 import PropertyType from "@/Types/PropertiesType";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 const ProfileProperties = ({ properties: initialProperties }: { properties: PropertyType[] }) => {
-  const [properties] = useState(initialProperties);
+  const [properties, setProperties] = useState(initialProperties);
+
+  const handleDeleteProperty = async (propertyId) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this property?");
+    if (!isConfirmed) return;
+    try {
+      await deleteProperty(propertyId);
+      const updatedProperties = properties.filter((property) => property._id !== propertyId);
+      setProperties(updatedProperties);
+      console.log("properties: ", properties);
+    } catch (error) {
+      console.error("Failed to delete property:", error);
+      // Maybe show an error message to the user
+    }
+  };
+
   return properties.map((property, index) => {
-    const {_id, name, location} = property
+    const { _id, name, location } = property;
     return (
       <div key={index} className='mb-10'>
         <Link href={`/properties/${_id}`}>
@@ -16,13 +32,15 @@ const ProfileProperties = ({ properties: initialProperties }: { properties: Prop
         </Link>
         <div className='mt-2'>
           <p className='text-lg font-semibold'>{name}</p>
-          <p className='text-gray-600'>Address: {location.street} {location.city} {location.state} {location.zipcode}</p>
+          <p className='text-gray-600'>
+            Address: {location.street} {location.city} {location.state} {location.zipcode}
+          </p>
         </div>
         <div className='mt-2'>
           <Link href={`/properties/${_id}/update`} className='bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600'>
             Edit
           </Link>
-          <button className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600' type='button'>
+          <button onClick={() => handleDeleteProperty(_id)} className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600' type='button'>
             Delete
           </button>
         </div>

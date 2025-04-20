@@ -27,29 +27,6 @@ import { redirect } from "next/navigation";
  * - Images are uploaded to Cloudinary, and their URLs are stored in the database.
  * - The property data is saved to the database, and the user is redirected to the newly created property's page.
  *
- * @example
- * ```typescript
- * const formData = new FormData();
- * formData.append("type", "Apartment");
- * formData.append("name", "Cozy Apartment");
- * formData.append("description", "A beautiful apartment in the city center.");
- * formData.append("location.street", "123 Main St");
- * formData.append("location.city", "New York");
- * formData.append("location.state", "NY");
- * formData.append("location.zipcode", "10001");
- * formData.append("beds", "2");
- * formData.append("baths", "1");
- * formData.append("square_feet", "800");
- * formData.append("amenities", "WiFi");
- * formData.append("amenities", "Parking");
- * formData.append("rates.nightly", "150");
- * formData.append("rates.weekly", "900");
- * formData.append("rates.monthly", "3000");
- * formData.append("seller_info.name", "John Doe");
- * formData.append("seller_info.email", "john.doe@example.com");
- * formData.append("seller_info.phone", "123-456-7890");
- * formData.append("images", imageFile); // Assuming `imageFile` is a valid File object
- *
  * await addProperty(formData);
  * ```
  */
@@ -57,9 +34,8 @@ export default async function addProperty(formData: FormData) {
   await connectDB();
   const sessionUser = await getSessionUser();
 
-  const userId = sessionUser?.user?.id;
-
   if (!sessionUser || !sessionUser.userId) throw new Error("User ID is required");
+  const { userId } = sessionUser;
 
   // Get all selected amenities from the form data.
   const amenities = formData.getAll("amenities");
