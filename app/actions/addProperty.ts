@@ -3,7 +3,7 @@
 import cloudinary from "@/config/cloudinary";
 import connectDB from "@/config/database";
 import Property from "@/models/Property";
-import { getSessionUser } from "@/utils/getSessionuser";
+import verifySession from "@/utils/verifySession";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -32,10 +32,7 @@ import { redirect } from "next/navigation";
  */
 export default async function addProperty(formData: FormData) {
   await connectDB();
-  const sessionUser = await getSessionUser();
-
-  if (!sessionUser || !sessionUser.userId) throw new Error("User ID is required");
-  const { userId } = sessionUser;
+  const userId = await verifySession()
 
   // Get all selected amenities from the form data.
   const amenities = formData.getAll("amenities");
@@ -74,7 +71,7 @@ export default async function addProperty(formData: FormData) {
     images: [] as string[], // Initialize images as an empty array with explicit type
   };
 
-  const imageUrls = [];
+  const imageUrls: string[] = [];
 
   // Iterate over each image file to upload it to Cloudinary.
   for (const imageFile of images) {
@@ -110,4 +107,5 @@ export default async function addProperty(formData: FormData) {
   revalidatePath("/", "layout");
   // Redirect the user to the newly created property's page.
   redirect(`/properties/${newProperty._id.toString()}`);
+
 }

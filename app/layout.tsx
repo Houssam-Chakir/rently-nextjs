@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/components/AuthProvider";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const poppins = Poppins({
   subsets: ["latin"], // make sure you include at least one subset
@@ -30,6 +32,7 @@ export default function MainLayout({
             <Navbar />
             {children}
             <Footer />
+            <ToastContainer/>
           </>
         </body>
       </html>
