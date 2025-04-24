@@ -1,7 +1,6 @@
 import PropertyCard from "@/components/PropertyCard";
 import connectDB from "@/config/database";
 import User from "@/models/User";
-import convertToSerializableObject from "@/utils/convertToObj";
 import { getSessionUser } from "@/utils/getSessionuser";
 
 const SavedPropertiesPage = async () => {
