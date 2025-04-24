@@ -15,7 +15,7 @@ const PropertyCard = ({ property }: PropertyCard) => {
   //     "nightly": 200,
   //     "weekly": 750,
   //     "monthly": 3300
-  //   },
+  //  },
   const getRateDisplay = () => {
     const { rates } = property;
     if (rates.monthly) return `$${rates.monthly.toLocaleString()}/mo`;
@@ -23,9 +23,9 @@ const PropertyCard = ({ property }: PropertyCard) => {
     else if (rates.nightly) return `$${rates.nightly.toLocaleString()}/night`;
   };
   return (
-    <div className='rounded-xl shadow-md relative'>
-      <Image src={property.images[0]} width='0' height='0' sizes='100vw' alt='' className='w-full h-auto rounded-t-xl' />
-      <div className='p-4'>
+    <div className='rounded-xl shadow-md relative h-max'>
+      <Image src={property.images[0]} width='0' height='0' sizes='100vw' alt='' className='w-full max-h-[300px] rounded-t-xl' />
+      <div className='p-4 h-fit'>
         <div className='text-left md:text-center lg:text-left mb-6'>
           <div className='text-gray-600'>{property.type}</div>
           <h3 className='text-xl font-bold'>{property.name}</h3>
