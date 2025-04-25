@@ -1,6 +1,7 @@
 import PropertyType from "@/Types/PropertiesType";
 
 const convertToPlainPropertyObject = (property) => {
+  console.log('property: ', typeof property.createdAt);
   const plainObj: PropertyType = {
     _id: property._id.toString(),
     owner: property.owner.toString(),
@@ -24,9 +25,25 @@ const convertToPlainPropertyObject = (property) => {
     },
     images: [...property.images],
     is_featured: property.is_featured,
-    createdAt: property.createdAt?.toISOString() || null, // Convert to ISO string
-    updatedAt: property.updatedAt?.toISOString() || null, // Convert to ISO string
+    createdAt: null,
+    updatedAt: null,
   };
+
+  if (property.createdAt instanceof Date) {
+    plainObj.createdAt = property.createdAt.toISOString();
+  } else if (typeof property.createdAt === 'string') {
+    // Optional: Validate if it's already an ISO string if needed,
+    // otherwise, assume the string form is acceptable.
+    plainObj.createdAt = property.createdAt;
+  }
+  // Add handling for other types like numbers (timestamps) if necessary
+
+  // Check and convert updatedAt
+  if (property.updatedAt instanceof Date) {
+    plainObj.updatedAt = property.updatedAt.toISOString();
+  } else if (typeof property.updatedAt === 'string') {
+    plainObj.updatedAt = property.updatedAt;
+  }
 
   return plainObj;
 };

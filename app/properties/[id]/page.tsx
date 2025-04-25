@@ -20,7 +20,8 @@ const PropertyPage = async ({ params }: PropertyDetailTypes) => {
   await connectDB();
 
   const { id } = await params;
-  const propertyDoc = (await Property.findById(id)) as PropertyType;
+  const propertyDoc = (await Property.findById(id).lean());
+  console.log('propertyDoc: ', propertyDoc);
   const property = convertToPlainPropertyObject(propertyDoc) as PropertyType;
   const user = await findUserById();
   const isBookmarked = user.bookmarks.includes(property._id);
