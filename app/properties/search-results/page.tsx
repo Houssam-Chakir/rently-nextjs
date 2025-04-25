@@ -2,7 +2,9 @@ import PropertyCard from "@/components/PropertyCard";
 import PropertySearchForm from "@/components/PropertySearchForm";
 import connectDB from "@/config/database";
 import Property from "@/models/Property";
+import PropertyType from "@/Types/PropertiesType";
 import convertToSerializableObject from "@/utils/convertToObj";
+import convertToPlainPropertyObject from "@/utils/convertToPlainPropertyObject";
 import Link from "next/link";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 
@@ -11,7 +13,10 @@ const SearchResultsPage = async ({ searchParams }) => {
 
   await connectDB();
   const locationPattern = new RegExp(location, "i");
-  let query = {
+  const query: {
+    $or: { [key: string]: RegExp }[];
+    type?: RegExp;
+  } = {
     $or: [
       { name: locationPattern },
       { description: locationPattern },
@@ -27,6 +32,7 @@ const SearchResultsPage = async ({ searchParams }) => {
     query.type = typePattern;
   }
 
+  console.log('query: ', query);
   const propertiesQueryResults = await Property.find(query).lean();
   const properties = convertToSerializableObject(propertiesQueryResults);
   console.log("properties: ", properties);
@@ -48,8 +54,9 @@ const SearchResultsPage = async ({ searchParams }) => {
             <p>No search results</p>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-              {properties.map((property) => {
-                return <PropertyCard key={property._id} property={property} />;
+              {properties.map((propertyDoc) => {
+                const property = convertToPlainPropertyObject(propertyDoc) as PropertyType
+                return <PropertyCard key={property._id.toString()} property={property} />;
               })}
             </div>
           )}

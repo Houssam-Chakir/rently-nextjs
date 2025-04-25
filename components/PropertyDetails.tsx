@@ -1,8 +1,11 @@
 import PropertyType from "@/Types/PropertiesType";
 import { FaBath, FaBed, FaCheck, FaMapMarker, FaRulerCombined, FaTimes } from "react-icons/fa";
 import PropertyMap from "./PropertyMap";
+import convertToPlainPropertyObject from "@/utils/convertToPlainPropertyObject";
 
-const PropertyDetails = ({ property }: { property: PropertyType }) => {
+const PropertyDetails = ({ property: propertyDoc }: { property: PropertyType }) => {
+  const property = convertToPlainPropertyObject(propertyDoc) as PropertyType;
+
   console.log("property: ", property);
   return (
     <main>
@@ -37,15 +40,15 @@ const PropertyDetails = ({ property }: { property: PropertyType }) => {
         <h3 className='text-lg font-bold mb-6'>Description & Details</h3>
         <div className='flex justify-center gap-4 text-blue-500 mb-4 text-xl space-x-9'>
           <p>
-            <FaBed className="inline-block mr-2"/>
+            <FaBed className='inline-block mr-2' />
             {property.beds} <span className='hidden sm:inline'>Beds</span>
           </p>
           <p>
-            <FaBath className="inline-block mr-2"/>
+            <FaBath className='inline-block mr-2' />
             {property.baths} <span className='hidden sm:inline'>Baths</span>
           </p>
           <p>
-            <FaRulerCombined className="inline-block mr-2"/>
+            <FaRulerCombined className='inline-block mr-2' />
             {property.square_feet} <span className='hidden sm:inline'>sqft</span>
           </p>
         </div>
@@ -59,7 +62,7 @@ const PropertyDetails = ({ property }: { property: PropertyType }) => {
           {property.amenities.map((item, index) => {
             return (
               <li key={index}>
-                <FaCheck className="inline-block text-green-600 mr-2"/> {item}
+                <FaCheck className='inline-block text-green-600 mr-2' /> {item}
               </li>
             );
           })}
@@ -67,7 +70,7 @@ const PropertyDetails = ({ property }: { property: PropertyType }) => {
       </div>
       {/* <!-- Map --> */}
       <div className='bg-white p-6 rounded-lg shadow-md mt-6'>
-        <PropertyMap property={property}/>
+        <PropertyMap property={property} />
       </div>
     </main>
   );

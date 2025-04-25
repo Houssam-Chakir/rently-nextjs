@@ -5,11 +5,12 @@ import connectDB from "@/config/database";
 import PropertyCard from "./PropertyCard";
 import Property from "@/models/Property";
 import PropertyType from "@/Types/PropertiesType";
+import convertToPlainPropertyObject from "@/utils/convertToPlainPropertyObject";
 
 const HomeProperties = async () => {
   await connectDB();
 
-  const recentProperties = await Property.find({}).sort({ createdAt: -1 }).limit(3);
+  const recentProperties = await Property.find({}).sort({ createdAt: -1 }).limit(3).lean();
 
   return (
     <>
@@ -20,7 +21,8 @@ const HomeProperties = async () => {
             <p>No properties found</p>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-              {recentProperties.map((property: PropertyType): ReactElement => {
+              {recentProperties.map((propertyDoc): ReactElement => {
+                const property = convertToPlainPropertyObject(propertyDoc) as PropertyType;
                 return <PropertyCard property={property} key={property._id.toString()} />;
               })}
             </div>

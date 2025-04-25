@@ -8,7 +8,7 @@ import ShareButtons from "@/components/ShareButtons";
 import connectDB from "@/config/database";
 import Property from "@/models/Property";
 import PropertyType from "@/Types/PropertiesType";
-import convertToSerializableObject from "@/utils/convertToObj";
+import convertToPlainPropertyObject from "@/utils/convertToPlainPropertyObject";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -21,7 +21,7 @@ const PropertyPage = async ({ params }: PropertyDetailTypes) => {
 
   const { id } = await params;
   const propertyDoc = (await Property.findById(id)) as PropertyType;
-  const property = convertToSerializableObject(propertyDoc) as PropertyType;
+  const property = convertToPlainPropertyObject(propertyDoc) as PropertyType;
   const user = await findUserById();
   const isBookmarked = user.bookmarks.includes(property._id);
 
