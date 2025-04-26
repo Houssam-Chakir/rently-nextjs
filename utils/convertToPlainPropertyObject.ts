@@ -25,8 +25,8 @@ const convertToPlainPropertyObject = (property) => {
     },
     images: [...property.images],
     is_featured: property.is_featured,
-    createdAt: null,
-    updatedAt: null,
+    createdAt: '',
+    updatedAt: '',
   };
 
   if (property.createdAt instanceof Date) {
