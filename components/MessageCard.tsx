@@ -2,14 +2,18 @@
 
 import deleteMessage from "@/app/actions/deleteMessage";
 import MarkMessageAsRead from "@/app/actions/MarkMessageAsRead";
+import { useGlobalContext } from "@/context/GlobalContext";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 const MessageCard = ({ message }) => {
   const [isRead, setIsRead] = useState(message.read);
 
+  const { setUnreadCount }= useGlobalContext();
+
   const handleMarkAsRead = async () => {
     const status = await MarkMessageAsRead(message._id);
+    if (setUnreadCount) setUnreadCount((prev) =>  status ? prev - 1 : prev + 1);
     setIsRead(status);
     toast.success(`Message marked as ${isRead ? "read" : "new"}`);
   };
@@ -17,6 +21,7 @@ const MessageCard = ({ message }) => {
   const handleDeleteMessage = async () => {
     if (confirm("are you sure you want to delete this message")) {
       await deleteMessage(message._id);
+      if (setUnreadCount) setUnreadCount(prev => prev -1)
       toast.success("Message deleted successfuly");
     } else toast.warning("Something went wrong deleting the message!");
   };

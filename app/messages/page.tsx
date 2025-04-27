@@ -6,6 +6,7 @@ import { getSessionUser } from "@/utils/getSessionuser";
 
 const MessagesPage = async () => {
   await connectDB();
+
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
     throw new Error("User session not found");
