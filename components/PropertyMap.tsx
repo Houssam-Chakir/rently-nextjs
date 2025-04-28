@@ -46,7 +46,7 @@ const PropertyMap = ({ property }) => {
       }
     };
     fetchCoords();
-  }, []);
+  }, [property.location.city, property.location.street, property.location.zipcode, property.location.state, viewport]);
 
   if (loading) return <Spinner />;
   if (geocodeError) return <div>No location data found</div>;
