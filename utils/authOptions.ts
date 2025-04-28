@@ -1,7 +1,7 @@
 import connectDB from "@/config/database";
 import User from "@/models/User";
 import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, Session } from "next-auth";
 
 /**
  * Configuration options for authentication, including providers and callbacks.
@@ -58,17 +58,23 @@ const authOptions: NextAuthOptions = {
      *
      * @throws Will throw an error if the database connection or user creation fails.
      */
-    async signIn({ profile }: { profile: { email: string; name: string; picture: string } }) {
+    async signIn({ profile }: { profile?: { email?: string; name?: string; picture?: string } }) {
+      const { email, name, picture } = profile || {};
+      if (!email || !name) throw new Error("Something went wrong signing in");
+      console.log("picture: ", picture);
+      console.log("name: ", name);
+      console.log("email: ", email);
+
       // Establish database connection
       await connectDB();
       // Check for existing user in database using profile email
-      const isUserExists = await User.findOne({ email: profile.email });
+      const isUserExists = await User.findOne({ email: email });
       // Create new user if no existing record found
       if (!isUserExists) {
         const newUser = {
-          email: profile.email,
-          username: profile.name.replace(/\s+/g, "").toLowerCase(), // Replace ALL spaces
-          image: profile.picture,
+          email: email,
+          username: name.replace(/\s+/g, "").toLowerCase(), // Replace ALL spaces
+          image: picture,
         };
 
         try {
@@ -81,13 +87,20 @@ const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async session({ session }: { session: { user: { email: string; id: string, name: string, image:string } } }) {
+    async session({ session }: { session: Session }) {
+      console.log('session: ', session);
+      if (!session.user || !session.user.email) {
+        throw new Error("Unable to get user info");
+      }
       // Retrieve the user from the database based on the email in the session.
       const user = await User.findOne({ email: session.user.email });
-      // Assign the user's ID from the database to the session's user object.  Convert the ID to a string for consistency.
-      session.user.id = user.id.toString();
+      if (!user) {
+        throw new Error("User not found");
+      }
+      // Assign the user's ID from the database to the session's user object. Convert the ID to a string for consistency.
+      // session.user.id = user._id.toString();
       // Return the modified session object.
-      return session;
+      return {...session, session: {id:user._id.toString()}};
     },
   },
 };
