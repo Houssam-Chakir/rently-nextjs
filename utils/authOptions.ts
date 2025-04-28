@@ -1,7 +1,7 @@
 import connectDB from "@/config/database";
 import User from "@/models/User";
 import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions, Session } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 
 /**
  * Configuration options for authentication, including providers and callbacks.
@@ -87,20 +87,15 @@ const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async session({ session }: { session: Session }) {
-      console.log('session: ', session);
-      if (!session.user || !session.user.email) {
-        throw new Error("Unable to get user info");
-      }
+    async session({ session }) {
+      const {user: sessionUser} = session || {}
+      if(!sessionUser) throw new Error('Unable to get user info')
       // Retrieve the user from the database based on the email in the session.
-      const user = await User.findOne({ email: session.user.email });
-      if (!user) {
-        throw new Error("User not found");
-      }
-      // Assign the user's ID from the database to the session's user object. Convert the ID to a string for consistency.
-      // session.user.id = user._id.toString();
+      const user = await User.findOne({ email: sessionUser.email });
+      // Assign the user's ID from the database to the session's user object.  Convert the ID to a string for consistency.
+      user.id = user.id.toString();
       // Return the modified session object.
-      return {...session, session: {id:user._id.toString()}};
+      return session;
     },
   },
 };
