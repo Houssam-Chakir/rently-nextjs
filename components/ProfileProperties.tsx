@@ -1,13 +1,13 @@
 "use client";
 
 import deleteProperty from "@/app/actions/deleteProperty";
-import PropertyType from "@/Types/PropertiesType";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-const ProfileProperties = ({ properties: initialProperties }: { properties: PropertyType[] }) => {
+const ProfileProperties = ({ properties: initialProperties }) => {
+  console.log('initialProperties: ', initialProperties);
   const [properties, setProperties] = useState(initialProperties);
 
   const handleDeleteProperty = async (propertyId) => {
