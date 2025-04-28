@@ -1,7 +1,7 @@
 import PropertyType from "@/Types/PropertiesType";
 
 const convertToPlainPropertyObject = (property) => {
-  console.log('property: ', typeof property.createdAt);
+  console.log('property in convert method: ', property);
   const plainObj: PropertyType = {
     _id: property._id.toString(),
     owner: property.owner.toString(),

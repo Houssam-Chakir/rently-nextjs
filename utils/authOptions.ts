@@ -1,7 +1,7 @@
 import connectDB from "@/config/database";
 import User from "@/models/User";
 import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, Session } from "next-auth";
 
 /**
  * Configuration options for authentication, including providers and callbacks.
@@ -22,6 +22,17 @@ import { NextAuthOptions } from "next-auth";
  *     - Assigns the user's ID from the database to the session's user object.
  *     - Returns the modified session object.
  */
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+}
+
 const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -88,13 +99,14 @@ const authOptions: NextAuthOptions = {
       return true;
     },
     async session({ session }) {
-      const {user: sessionUser} = session || {}
-      if(!sessionUser) throw new Error('Unable to get user info')
-      // Retrieve the user from the database based on the email in the session.
-      const user = await User.findOne({ email: sessionUser.email });
-      // Assign the user's ID from the database to the session's user object.  Convert the ID to a string for consistency.
-      user.id = user.id.toString();
-      // Return the modified session object.
+      // 1. Get user from database
+      if (!session.user || !session.user.email) {
+        throw new Error("Session user or email is undefined");
+      }
+      const user = await User.findOne({ email: session.user.email });
+      // 2. Assign the user id to the session
+      session.user.id = user._id.toString();
+      // 3. return session
       return session;
     },
   },

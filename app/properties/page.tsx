@@ -24,6 +24,7 @@ const PropertiesPage = async ({ searchParams }) => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             {properties.map((propertyDoc): ReactElement => {
+              console.log('propertyDoc: ', propertyDoc);
               const property = convertToPlainPropertyObject(propertyDoc) as PropertyType;
               return <PropertyCard property={property} key={property._id.toString()} />;
             })}

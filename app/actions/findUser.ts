@@ -6,8 +6,11 @@ import { getSessionUser } from "@/utils/getSessionuser";
 
 const findUserById = async () => {
   const sessionUser = await getSessionUser();
+  console.log('sessionUser: ', sessionUser);
   const userDoc = await User.findById(sessionUser?.userId) as UserType;
+  console.log('userDoc: ', userDoc);
   const user = convertToSerializableObject(userDoc)
+  console.log('user: ', user);
   return user
 }
 
